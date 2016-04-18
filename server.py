@@ -21,4 +21,9 @@ def index():
         output += "</b></div>"
     return output
 
+@route('/tpl')
+def tpl():
+    content=["aa","bb"]
+    return template('index', basket=content)
+
 run(host='0.0.0.0', port=9696, reloader=True)
