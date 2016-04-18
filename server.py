@@ -15,8 +15,12 @@ def index():
     for filepath in glob.glob(os.path.join("/home/amk/.config/whizkers/variable_sets/", '*.yaml')):
         content = open(filepath).read()
         filename = ntpath.basename(filepath)
-        found_hex = re.findall(r'#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{6})\b', content, flags=re.DOTALL)
-        dict = {'filename': filename,'filepath': filepath,'hex': found_hex}
+        found_hex = re.findall(r'#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{6})\b', content, re.DOTALL)
+        found_keywords = re.findall(r'(\w+)\:', content, re.DOTALL)
+        colors = {}
+        for i,val in enumerate(found_hex):
+            colors[found_keywords[i]] = found_hex[i]
+        dict = {'filename': filename,'filepath': filepath,'keywords': found_keywords,'hex': found_hex, 'colors': colors}
         output.append(dict)
         
     output = sorted(output, key=lambda k: k['filename'].lower()) 
