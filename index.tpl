@@ -9,8 +9,12 @@
  </head>
  <body>
 <ul>
-  % for item in basket:
-    <li>{{item}}</li>
+  % for item in e:
+    <h3>{{item['filename']}}</h3>
+  	% for hex in item['hex']:
+		<span style="color:{{hex}}">███</span>
+	% end
+	<hr>
   % end
 </ul>
  

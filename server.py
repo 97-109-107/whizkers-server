@@ -1,6 +1,7 @@
 from bottle import route, run, template
 import os, glob
 import re
+import ntpath
 
 # TODO identify the background foreground hexs, then parsem them further to bare vars
 
@@ -10,20 +11,15 @@ def static(path):
 
 @route('/')
 def index():
-    output = ""
-    for filename in glob.glob(os.path.join("/home/amk/.config/whizkers/variable_sets/", '*.yaml')):
-        content = open(filename).read()
-        output += "<h3>"+filename+"</h3>"
-        inside_brackets = re.findall(r'#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{6})\b', content, flags=re.DOTALL)
-        output += "<div><b>"
-        for attributes in inside_brackets:
-            output += "<span style='color:"+attributes+"'>"+attributes+"</span><br>"
-        output += "</b></div>"
-    return output
-
-@route('/tpl')
-def tpl():
-    content=["aa","bb"]
-    return template('index', basket=content)
+    output = []
+    for filepath in glob.glob(os.path.join("/home/amk/.config/whizkers/variable_sets/", '*.yaml')):
+        content = open(filepath).read()
+        filename = ntpath.basename(filepath)
+        found_hex = re.findall(r'#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{6})\b', content, flags=re.DOTALL)
+        dict = {'filename': filename,'filepath': filepath,'hex': found_hex}
+        output.append(dict)
+        
+    output = sorted(output, key=lambda k: k['filename'].lower()) 
+    return template('index', e=output)
 
 run(host='0.0.0.0', port=9696, reloader=True)
