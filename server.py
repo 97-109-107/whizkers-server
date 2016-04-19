@@ -12,8 +12,7 @@ port = 9696
 def static(path):
     return static_file(path, root='static')
 
-@route('/')
-def index():
+def renderThemes():
     output = []
     for filepath in glob.glob(os.path.join("/home/amk/.config/whizkers/variable_sets/", '*.yaml')):
         content = open(filepath).read()
@@ -26,19 +25,19 @@ def index():
             colors[found_keywords[i]] = found_hex[i]
         dict = {'themename': themename, 'filename': filename,'filepath': filepath,'keywords': found_keywords,'hex': found_hex, 'colors': colors}
         output.append(dict)
-        
+
     output = sorted(output, key=lambda k: k['filename'].lower()) 
     return template('index', e=output)
 
-@route('/apply')
-def apply():
+@route('/')
+def index():
     theme = request.query.get( "theme" )
-    if "" != theme:
+    if theme:
         print("Received request for " + theme)
         call([command, theme])
         call(["reload-desktop"])
-        return { "success" : True, "theme" : theme }
+        return renderThemes()
     else:
-        return { "success" : False, "error" : "dl called without a theme" }
+        return renderThemes()
 
 run(host='0.0.0.0', port=port, reloader=True)

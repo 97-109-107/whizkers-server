@@ -37,7 +37,7 @@ a, a:link, a:visited, a:hover, a:active {
   	<div class="bcg" style="background-color:{{item['colors'].get('background', "")}}">
     	<h3 style="color:{{item['colors'].get('foreground', "")}}">
     		{{item['themename']}}
-    		<a class="button" style="background-color:{{item['colors'].get('foreground', "black")}}; color:{{item['colors'].get('background', "white")}}" href="/apply?theme={{item['themename']}}">
+    		<a class="button" style="background-color:{{item['colors'].get('foreground', "black")}}; color:{{item['colors'].get('background', "white")}}" href="?theme={{item['themename']}}">
     		Apply
     		</a>
     	</h3>
