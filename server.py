@@ -1,12 +1,35 @@
+#!/usr/bin/python3
 from bottle import route, run, template, request
-import os, glob
-import re
-import ntpath
+import os, glob, re, ntpath
 from subprocess import call
 
-command = "whizkers"
-port = 9696
-# TODO identify the background foreground hexs, then parsem them further to bare vars
+#             ██      ██        ██                                         
+#            ░██     ░░        ░██                                         
+#  ███     ██░██      ██ ██████░██  ██  █████  ██████  ██████      
+# ░░██  █ ░██░██████ ░██░░░░██ ░██ ██  ██░░░██░░██░░█ ██░░░░  █████
+#  ░██ ███░██░██░░░██░██   ██  ░████  ░███████ ░██ ░ ░░█████ ░░░░░ 
+#  ░████░████░██  ░██░██  ██   ░██░██ ░██░░░░  ░██    ░░░░░██      
+#  ███░ ░░░██░██  ░██░██ ██████░██░░██░░██████░███    ██████       
+# ░░░    ░░░ ░░   ░░ ░░ ░░░░░░ ░░  ░░  ░░░░░░ ░░░    ░░░░░░        
+#                                                  
+#   ██████  █████  ██████ ██    ██  █████  ██████  
+#  ██░░░░  ██░░░██░░██░░█░██   ░██ ██░░░██░░██░░█  
+# ░░█████ ░███████ ░██ ░ ░░██ ░██ ░███████ ░██ ░   
+#  ░░░░░██░██░░░░  ░██    ░░████  ░██░░░░  ░██     
+#  ██████ ░░██████░███     ░░██   ░░██████░███     
+# ░░░░░░   ░░░░░░ ░░░       ░░     ░░░░░░ ░░░      
+#
+# https://github.com/97-109-107/whizkers-server
+# Depends on whizkers (https://github.com/metakirby5/whizkers) by metakirby5
+
+# The command in your PATH to load the them, will be executed with the theme name as the last element
+command_load = os.getenv('WHIZ_EXE_CMD', "whizkers")
+# The command in your PATH to restart the programs/wm (by default fullsalvo's wz-utils)
+command_reload = os.getenv('WHIZ_EXE_CMD', "reload-desktop")
+# Port for the server
+port = os.getenv('WHIZ_SERV_PORT', 9696)
+# location of your yaml variable sets
+variable_sets_path = os.getenv('WHIZ_SERV_VPATH',os.path.join(os.path.expanduser("~"), ".config/whizkers/variable_sets/"))
 
 @route('/static/:path#.+#', name='static')
 def static(path):
@@ -14,7 +37,7 @@ def static(path):
 
 def renderThemes():
     output = []
-    for filepath in glob.glob(os.path.join("/home/amk/.config/whizkers/variable_sets/", '*.yaml')):
+    for filepath in glob.glob(os.path.join(variable_sets_path, '*.yaml')):
         content = open(filepath).read()
         filename = ntpath.basename(filepath)
         themename = os.path.splitext(filename)[0]
@@ -34,8 +57,8 @@ def index():
     theme = request.query.get( "theme" )
     if theme:
         print("Received request for " + theme)
-        call([command, theme])
-        call(["reload-desktop"])
+        call([command_load, theme])
+        call([command_reload])
         return renderThemes()
     else:
         return renderThemes()
