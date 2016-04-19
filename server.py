@@ -41,8 +41,10 @@ def renderThemes():
         content = open(filepath).read()
         filename = ntpath.basename(filepath)
         themename = os.path.splitext(filename)[0]
+        #FIXME what about colors defined by words (ex. 'cyan')
         found_hex = re.findall(r'#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{6})\b', content, re.DOTALL)
-        found_keywords = re.findall(r'(\w+)\:', content, re.DOTALL)
+        #the '\s' is used to only pick up only actual values, and not nesting in yaml
+        found_keywords = re.findall(r'(\w+)\:\s', content, re.DOTALL)
         colors = {}
         for i,val in enumerate(found_hex):
             colors[found_keywords[i]] = found_hex[i]

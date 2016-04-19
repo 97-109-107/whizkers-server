@@ -34,10 +34,10 @@ a, a:link, a:visited, a:hover, a:active {
  </head>
  <body>
   % for item in e:
-  	<div class="bcg" style="background-color:{{item['colors'].get('background', "")}}">
-    	<h3 style="color:{{item['colors'].get('foreground', "")}}">
+  	<div class="bcg" style="background-color:{{ item['colors'].get('background') or 'black' }}">
+    	<h3 style="color:{{ item['colors'].get('foreground') or item['colors'].get('primary') or 'white' }}">
     		{{item['themename']}}
-    		<a class="button" style="background-color:{{item['colors'].get('foreground', "black")}}; color:{{item['colors'].get('background', "white")}}" href="?theme={{item['themename']}}">
+    		<a class="button" style="background-color:{{ item['colors'].get('foreground') or item['colors'].get('primary') or 'white' }}; color:{{ item['colors'].get('background') or 'black' }}" href="?theme={{item['themename']}}">
     		Apply
     		</a>
     	</h3>
