@@ -36,30 +36,32 @@ variable_sets_path = os.getenv('WHIZ_SERV_VPATH',os.path.join(os.path.expanduser
 def static(path):
     return static_file(path, root='static')
 
+
 def renderThemes():
     output = []
-    for path, dirs, files in os.walk(variable_sets_path):
-        for filename in files:
-            fullpath = os.path.join(path, filename)
-            print(fullpath)
-            with open(fullpath, 'r') as f:
-                content = open(fullpath).read()
-                filename = ntpath.basename(fullpath)
+    for (dir, _, files) in os.walk(variable_sets_path):
+         for f in files:
+             path = os.path.join(dir, f)
+             if os.path.exists(path):
+                filename = ntpath.basename(path)
                 theme_name = os.path.splitext(filename)[0]
+                with open(path, 'r') as f:
+                    try:
+                        colors = {}
+                        content = yaml.load(f)
 
-                #FIXME what about colors defined by words (ex. 'cyan')
-                found_hex = re.findall(r'#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{6})\b', content, re.DOTALL)
-                #the '\s' is used to only pick up only actual values, and not nesting in yaml
-                found_keywords = re.findall(r'(\w+)\:\s', content, re.DOTALL)
+                        # If the value for a key is color (hex), then append it to the color dict
+                        for key, value in content.items():
+                            if(re.findall(r'#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{6})', str(value), re.DOTALL)):
+                                colors[key] = value
 
-                colors = {}
-                for i,val in enumerate(found_hex):
-                    colors[found_keywords[i]] = found_hex[i]
-                dict = {'theme_name': theme_name, 'filename': filename,'fullpath': fullpath,'keywords': found_keywords,'hex': found_hex, 'colors': colors}
-                output.append(dict)
+                        output.append({ 'theme_name': theme_name, 'filename': filename, 'fullpath': path, 'colors': colors })
 
-        output = sorted(output, key=lambda k: k['filename'].lower()) 
-        return template('index', e=output)
+                    except yaml.YAMLError as exc:
+                        print("Skipping. There's a yaml parsing error:", exc)
+
+    output = sorted(output, key=lambda k: k['filename'].lower()) 
+    return template('index', e=output)
 
 @route('/')
 def index():

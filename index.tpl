@@ -42,8 +42,8 @@ a, a:link, a:visited, a:hover, a:active {
     		</a>
     	</h3>
     	<div>
-  		% for hex in item['hex']:
-			<span style="color:{{hex}}">███</span>
+  		% for key,val in item['colors'].items():
+		<span style="color:{{val}}">███</span>
 		% end
     	</div>
     </div>
