@@ -28,8 +28,8 @@ You use ``whizkers``, you have at least *background* and *foreground*/*primary* 
 ### Preview
 ![preview](https://0x0.st/ZMz.png)
 ### Issues
-- Would've been smarter to parse the yaml with a parser, not as text
-- The scripts gets hung up over comments (the regex for finding hex colors could be more refined).
+- ~~Would've been smarter to parse the yaml with a parser, not as text~~
+- ~~The scripts gets hung up over comments (the regex for finding hex colors could be more refined)~~
 - The blocks of color don't exclude *background* and *foreground* (which are presented as the section background color and text)
 - Supports only hex values
 
