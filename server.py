@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# -*- coding: utf-8 -*-
 from bottle import route, run, template, request
 import os, glob, re, ntpath
 from subprocess import call
