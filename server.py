@@ -55,7 +55,8 @@ def renderThemes():
                             if(re.findall(r'#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{6})', str(value), re.DOTALL)):
                                 colors[key] = value
 
-                        output.append({ 'theme_name': theme_name, 'filename': filename, 'fullpath': path, 'colors': colors })
+                        if len(colors) > 0: 
+                            output.append({ 'theme_name': theme_name, 'filename': filename, 'fullpath': path, 'colors': colors })
 
                     except yaml.YAMLError as exc:
                         print("Skipping. There's a yaml parsing error:", exc)
