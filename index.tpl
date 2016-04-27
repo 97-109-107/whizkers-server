@@ -10,8 +10,20 @@
  body{
  	 background-color: #3e3e3e;
  }
+ img{
+ 	 max-height: 100px;
+ }
+div.color-section{
+ 	float: left;
+ 	width: 80%;
+}
+div.image-section{
+ 	float: right;
+ 	width: 20%;
+}
  div.bcg{
  	 padding: 10px;
+ 	 height: 100px;
  }
  button{
     -webkit-appearance: button;
@@ -35,17 +47,26 @@ a, a:link, a:visited, a:hover, a:active {
  <body>
   % for item in e:
   	<div class="bcg" style="background-color:{{ item['colors'].get('background') or 'black' }}">
-    	<h3 style="color:{{ item['colors'].get('foreground') or item['colors'].get('primary') or 'white' }}">
-    		{{item['theme_name']}}
-    		<a class="button" style="background-color:{{ item['colors'].get('foreground') or item['colors'].get('primary') or 'white' }}; color:{{ item['colors'].get('background') or 'black' }}" href="?theme={{item['theme_name']}}">
-    		Apply
-    		</a>
-    	</h3>
-    	<div>
-  		% for key,val in item['colors'].items():
-		<span style="color:{{val}}">███</span>
-		% end
+
+    	<div class="color-section">
+
+			<h3 style="color:{{ item['colors'].get('foreground') or item['colors'].get('primary') or 'white' }}">
+    			{{item['theme_name']}}
+    			<a class="button" style="background-color:{{ item['colors'].get('foreground') or item['colors'].get('primary') or 'white' }}; color:{{ item['colors'].get('background') or 'black' }}" href="?theme={{item['theme_name']}}">
+    			Apply
+    			</a>
+			</h3>
+
+  			% for key,val in item['colors'].items():
+			<span style="color:{{val}}">███</span>
+			% end
     	</div>
+
+		%if item['wallpapers']:
+    	<div class="image-section">
+			<img src="data:image/png;base64,{{item['wallpapers']}}">
+    	</div>
+    	%end
     </div>
   % end
  
