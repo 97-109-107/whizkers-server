@@ -52,7 +52,7 @@ a, a:link, a:visited, a:hover, a:active {
     style="background:
     linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     url('data:image/png;base64,{{item['wallpapers']}}')
-    no-repeat center center">
+    repeat center center">
 
     	<div class="color-section">
 
