@@ -9,6 +9,8 @@
  }
  body{
  	 background-color: #3e3e3e;
+   margin: 0;
+   padding: 0;
  }
  img{
  	 max-height: 100px;
@@ -46,7 +48,11 @@ a, a:link, a:visited, a:hover, a:active {
  </head>
  <body>
   % for item in e:
-  	<div class="bcg" style="background-color:{{ item['colors'].get('background') or 'black' }}">
+    <div class="bcg"
+    style="background:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url('data:image/png;base64,{{item['wallpapers']}}')
+    repeat center center">
 
     	<div class="color-section">
 
@@ -62,11 +68,6 @@ a, a:link, a:visited, a:hover, a:active {
 			% end
     	</div>
 
-		%if item['wallpapers']:
-    	<div class="image-section">
-			<img src="data:image/png;base64,{{item['wallpapers']}}">
-    	</div>
-    	%end
     </div>
   % end
  
