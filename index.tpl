@@ -23,9 +23,13 @@ div.image-section{
  	float: right;
  	width: 20%;
 }
- div.bcg{
- 	 padding: 10px;
- 	 height: 100px;
+div.bcg{
+ 	height: 100px;
+}
+ div.tinting{
+	margin: 0px;
+ 	padding: 10px;
+ 	height: 100px;
  }
  button{
     -webkit-appearance: button;
@@ -48,11 +52,16 @@ a, a:link, a:visited, a:hover, a:active {
  </head>
  <body>
   % for item in e:
-    <div class="bcg"
+	<div class="bcg"
+	style="background: {{ item['colors'].get('background') or 'black' }}">
+    <div class="tinting"
+    %if item['wallpapers']:
     style="background:
     linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     url('data:image/png;base64,{{item['wallpapers']}}')
-    repeat center center">
+    repeat center center"
+    %end
+    >
 
     	<div class="color-section">
 
@@ -68,6 +77,7 @@ a, a:link, a:visited, a:hover, a:active {
 			% end
     	</div>
 
+    </div>
     </div>
   % end
  
