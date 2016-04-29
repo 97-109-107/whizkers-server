@@ -25,6 +25,7 @@ from PIL import Image, ImageOps
 # https://github.com/97-109-107/whizkers-server
 # Depends on whizkers (https://github.com/metakirby5/whizkers) by metakirby5
 
+
 # The command in your PATH to load the them, will be executed with the theme name as the last element
 command_load = os.getenv('WHIZ_EXE_CMD', "whizkers")
 # The command in your PATH to restart the programs/wm (by default fullsalvo's wz-utils)
@@ -57,7 +58,7 @@ def renderThemes():
 						print("Skipping. There's a yaml parsing error:", exc)
 
 	output = sorted(output, key=lambda k: k['filename'].lower()) 
-	return template('index', e=output)
+	return (template('index', e=output), output)
 
 def parse(d, path=[], colors=None, wallpapers=None):
 	colors = colors or {}
@@ -99,12 +100,13 @@ def make_thumb(wallpapers):
 @route('/')
 def index():
 	theme = request.query.get( "theme" )
+	template, output = renderThemes()
 	if theme:
-		print("Received request for " + theme)
-		call([command_load, theme])
+		#filter through the whole list of themes for the one just requested, get the full path
+		theme_path = list(filter(lambda i: i['theme_name'] == theme, output))[0]['fullpath']
+		print("located ")
+		call([command_load, theme_path])
 		call([command_reload])
-		return renderThemes()
-	else:
-		return renderThemes()
+	return template
 
 run(host='0.0.0.0', port=port, reloader=True)
