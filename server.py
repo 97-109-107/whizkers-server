@@ -29,7 +29,7 @@ from PIL import Image, ImageOps
 # The command in your PATH to load the them, will be executed with the theme name as the last element
 command_load = os.getenv('WHIZ_EXE_CMD', "whizkers")
 # The command in your PATH to restart the programs/wm (by default fullsalvo's wz-utils)
-command_reload = os.getenv('WHIZ_EXE_CMD', "reload-desktop")
+command_reload = os.getenv('WHIZ_RELOAD_CMD', "reload-desktop")
 # Port for the server
 port = os.getenv('WHIZ_SERV_PORT', 9696)
 # location of your yaml variable sets
