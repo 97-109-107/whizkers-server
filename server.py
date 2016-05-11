@@ -33,7 +33,7 @@ command_reload = os.getenv('WHIZ_RELOAD_CMD', "reload-desktop")
 # Port for the server
 port = os.getenv('WHIZ_SERV_PORT', 9696)
 # location of your yaml variable sets
-variable_sets_path = os.getenv('WHIZ_SERV_VPATH',os.path.expanduser("~/.config/whizkers/variable_sets"))
+variable_sets_path = os.getenv('WHIZ_SERV_VPATH',os.path.expanduser("~/.config/whizkers/variable_sets/"))
 
 @route('/static/:path#.+#', name='static')
 def static(path):
@@ -50,9 +50,17 @@ def renderThemes():
 				with open(path, 'r') as f:
 					try:
 						content = yaml.load(f)
-						colors, wallpapers = parse(content)
+						colors, wallpapers, fg, bg = parse(content)
 						if wallpapers or colors:
-							output.append({ 'theme_name': theme_name, 'filename': filename, 'fullpath': path, 'colors': colors, 'wallpapers': make_thumb(wallpapers) })
+							output.append({
+								'theme_name': theme_name,
+								'filename': filename,
+								'fullpath': path,
+								'colors': colors,
+								'fg': fg,
+								'bg': bg,
+								'wallpapers': make_thumb(wallpapers)
+								})
 
 					except yaml.YAMLError as exc:
 						print("Skipping. There's a yaml parsing error:", exc)
@@ -60,26 +68,34 @@ def renderThemes():
 	output = sorted(output, key=lambda k: k['filename'].lower()) 
 	return (template('index', e=output), output)
 
-def parse(d, path=[], colors=None, wallpapers=None):
+def parse(d, path=[], colors=None, wallpapers=None, bg=None, fg=None):
 	colors = colors or {}
 	wallpapers = wallpapers or ""
+	fg = fg or ""
+	bg = bg or ""
 	for k,v in d.items():
 		if isinstance(v, (int, float, list, type(None))):
 			pass
 		elif isinstance(v, str):
 			path.append(k)
 			if looks_like_color(v):
-				colors[".".join(path)] = v
+				# Check if any of the colors are called background or foreground, expose them for easy handling
+				if(path[-1] == "foreground"):
+					fg = v
+				elif(path[-1] == "background"):
+					bg = v
+				else:
+					colors[".".join(path)] = v
 			elif looks_like_wallpaper(v):
 				wallpapers = os.path.expanduser(v)
 			path.pop()
 		elif isinstance(v, dict):
 			path.append(k)
-			colors, wallpapers = parse(v, path, colors, wallpapers)
+			colors, wallpapers, fg, bg = parse(v, path, colors, wallpapers, fg, bg)
 			path.pop()
 		else:
 			print("###Type {} not recognized: {}.{}={}".format(type(v), ".".join(path),k, v))
-	return colors, wallpapers 
+	return colors, wallpapers, fg, bg
 
 def looks_like_wallpaper(s):
 	if re.findall(r'\.(jpe?g|png|gif|bmp)', s, re.IGNORECASE or re.DOTALL):

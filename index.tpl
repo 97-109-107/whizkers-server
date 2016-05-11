@@ -53,7 +53,7 @@ a, a:link, a:visited, a:hover, a:active {
  <body>
   % for item in e:
 	<div class="bcg"
-	style="background: {{ item['colors'].get('background') or 'black' }}">
+	style="background: {{ item.get('bg') or 'black' }}">
     <div class="tinting"
     %if item['wallpapers']:
     style="background:
@@ -65,9 +65,9 @@ a, a:link, a:visited, a:hover, a:active {
 
     	<div class="color-section">
 
-			<h3 style="color:{{ item['colors'].get('foreground') or item['colors'].get('primary') or 'white' }}">
+			<h3 style="color:{{ item.get('fg') or 'white' }}">
     			{{item['theme_name']}}
-    			<a class="button" style="background-color:{{ item['colors'].get('foreground') or item['colors'].get('primary') or 'white' }}; color:{{ item['colors'].get('background') or 'black' }}" href="?theme={{item['theme_name']}}">
+    			<a class="button" style="background-color:{{ item.get('fg') or 'white' }}; color:{{ item.get('bg') or 'black' }}" href="?theme={{item['theme_name']}}">
     			Apply
     			</a>
 			</h3>
