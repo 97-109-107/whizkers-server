@@ -49,6 +49,17 @@ a, a:link, a:visited, a:hover, a:active {
 }
   
  </style>
+<script type="text/javascript">
+window.onload = function () {
+        function getPathFromUrl(url) {
+  				return url.split("?")[0];
+	  	}
+	  	var oldpath, newpath;
+	  	oldpath = window.location.href
+		newpath = getPathFromUrl(window.location.href )
+	  	if(oldpath != newpath) window.location.href = newpath
+}
+</script>
  </head>
  <body>
   % for item in e:
