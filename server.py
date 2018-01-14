@@ -33,7 +33,7 @@ command_reload = os.getenv('WHIZ_RELOAD_CMD', "reload-desktop")
 # Port for the server
 port = os.getenv('WHIZ_SERV_PORT', 9696)
 # location of your yaml variable sets
-variable_sets_path = os.getenv('WHIZ_SERV_VPATH',os.path.expanduser("~/.config/whizkers/variable_sets/"))
+variable_sets_path = os.getenv('WHIZ_SERV_VPATH',os.path.expanduser("~/.config/zenbu/variable_sets/"))
 
 @route('/static/:path#.+#', name='static')
 def static(path):
@@ -80,12 +80,11 @@ def parse(d, path=[], colors=None, wallpapers=None, bg=None, fg=None):
 			path.append(k)
 			if looks_like_color(v):
 				# Check if any of the colors are called background or foreground, expose them for easy handling
+				if(path[-1] == "background"):
+					bg = v
 				if(path[-1] == "foreground"):
 					fg = v
-				elif(path[-1] == "background"):
-					bg = v
-				else:
-					colors[".".join(path)] = v
+				colors[".".join(path)] = v
 			elif looks_like_wallpaper(v):
 				wallpapers = os.path.expanduser(v)
 			path.pop()
